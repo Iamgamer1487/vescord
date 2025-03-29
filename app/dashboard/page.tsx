@@ -2,6 +2,7 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useEffect, useState } from 'react';
 import { getMessages, createMessage } from '@/backend/prisma'; // Make sure this function is correctly set up to fetch messages
+import Link from 'next/link';
 
 export default function Dashboard() {
     const { user, error, isLoading } = useUser();
@@ -13,7 +14,7 @@ export default function Dashboard() {
         const fetchMessages = async () => {
             try {
                 const msgs = await getMessages(); // Fetch messages from your backend
-                //@ts-ignore
+                //@ts-expect-error
                 setMessages(msgs); // Set the fetched messages in state
                 setFetchError(null); // Clear any previous errors
             } catch (error) {
@@ -29,7 +30,7 @@ export default function Dashboard() {
 
     const handleSendMessage = () => {
         if (message.trim()) {
-            //@ts-ignore
+            //@ts-expect-error
            createMessage(message, user?.name, user?.email)
         } else {
             alert('Please enter a message!');
@@ -56,12 +57,12 @@ export default function Dashboard() {
             <div className="p-6 bg-blue-950 shadow-lg rounded-lg w-full text-center mb-6">
                 <h1 className="text-3xl font-bold text-white mb-6">Welcome, {user.name}!</h1>
 
-                <a
+                <Link
                     href="/api/auth/logout"
                     className="px-8 py-4 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition duration-300"
                 >
                     Logout
-                </a>
+                </Link>
             </div>
 
             {/* Displaying messages */}
